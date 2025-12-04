@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stephen Wiggins | Applied Mathematics & Nonlinear Dynamics</title>
+    <style>
+        /* --- GLOBAL STYLES --- */
+        :root {
+            --primary: #2c3e50;
+            --accent: #e67e22; /* Orange accent */
+            --light: #ecf0f1;
+            --text-dark: #333;
+            --overlay-color: rgba(0, 0, 0, 0.75);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: #f9f9f9;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { font-weight: 700; margin-bottom: 1rem; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; padding: 0; margin: 0; }
+
+        /* --- LANGUAGE SWITCHER --- */
+        .lang-switch-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 15px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            gap: 5px;
+            backdrop-filter: blur(5px);
+        }
+
+        .lang-btn {
+            background: none;
+            border: 1px solid transparent;
+            font-weight: bold;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        .lang-btn:hover { background-color: #ddd; }
+        
+        .lang-btn.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background-color: #2c3e50; 
+            background-image: linear-gradient(var(--overlay-color), var(--overlay-color)), url('Background images/graphAbs_contrast.png');
+            background-position: center;
+            background-size: cover;
+            background-attachment: scroll; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .hero-content { max-width: 900px; z-index: 2; }
+
+        .profile-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 5px solid white;
+            object-fit: contain; 
+            background-color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-top: 15px;
+            color: #ddd;
+        }
+
+        /* Hero Social Buttons */
+        .hero-links {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 12px; 
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .hero-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        /* --- SECTIONS --- */
+        .bio-section { padding: 80px 20px; background: white; text-align: center; }
+        .themes-section { padding: 80px 20px; background-color: #f4f4f4; }
+        .books-section { padding: 80px 20px; background: white; }
+        
+        .pubs-section {
+            background-color: #2c3e50; 
+            background-image: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)), url('Background images/imagen_paper_color3bis.png');
+            background-size: cover;
+            background-position: center;
+            padding: 80px 20px;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            margin: 15px auto;
+        }
+
+        .bio-text { font-size: 1.25rem; max-width: 800px; margin: 0 auto; color: #555; }
+
+        /* Themes Grid */
+        .themes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .theme-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 5px solid var(--accent); transition: transform 0.3s; }
+        .theme-card:hover { transform: translateY(-5px); }
+
+        /* Books Grid */
+        .books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 40px; justify-items: center; align-items: end; }
+        .book-item { width: 100%; max-width: 180px; transition: transform 0.3s; }
+        .book-item:hover { transform: scale(1.08); z-index: 10; }
+        .book-item img { width: 100%; height: auto; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: block; }
+
+        /* Publications */
+        .pub-list { max-width: 900px; margin: 0 auto; }
+        .pub-item { background: white; margin-bottom: 20px; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; border-left: 5px solid var(--primary); transition: transform 0.2s; gap: 20px; }
+        .pub-item:hover { transform: translateX(5px); }
+        .pub-content { flex: 1; }
+        .pub-content h4 { margin: 0 0 5px 0; font-size: 1.15rem; color: var(--primary); line-height: 1.4; }
+        .pub-content p { margin: 0; font-size: 0.95rem; color: #666; }
+        
+        .download-btn { background-color: var(--primary); color: white; padding: 10px 20px; border-radius: 4px; font-size: 0.9rem; white-space: nowrap; font-weight: 600; flex-shrink: 0; }
+        .download-btn:hover { background-color: var(--accent); }
+
+        /* Footer */
+        .footer { background-color: var(--primary); color: white; padding: 60px 20px; text-align: center; }
+        .footer-links { display: flex; justify-content: center; gap: 25px; margin-top: 25px; flex-wrap: wrap; }
+        .footer-link { color: #ddd; font-size: 1rem; border-bottom: 1px solid transparent; }
+        .footer-link:hover { color: var(--accent); border-bottom: 1px solid var(--accent); }
+
+        /* New Language Info Button */
+        .lang-info-btn {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .lang-info-btn:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .themes-grid { grid-template-columns: 1fr; }
+            .pub-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .download-btn { margin-left: 0; width: 100%; text-align: center; }
+            .lang-switch-container { width: 100%; justify-content: center; top: 0; right: 0; border-radius: 0; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switch-container">
+        <button id="btn-en" class="lang-btn active" onclick="setLanguage('en')">EN</button>
+        <button id="btn-es" class="lang-btn" onclick="setLanguage('es')">ES</button>
+        <button id="btn-fr" class="lang-btn" onclick="setLanguage('fr')">FR</button>
+        <button id="btn-zh" class="lang-btn" onclick="setLanguage('zh')">中文</button>
+        <button id="btn-chr" class="lang-btn" onclick="setLanguage('chr')">ᏣᎳᎩ</button>
+    </div>
+
+    <div id="content-en" class="lang-content">
+        <header class="hero">
+            <div class="hero-content">
+                <img src="StephenWiggins.jpg" alt="Stephen Wiggins" class="profile-photo">
+                <h1>Stephen Wiggins</h1>
+                <p>Applied Mathematics | Nonlinear Dynamics | Chaos Theory</p>
+                <div class="hero-links">
+                    <a href="https://en.wikipedia.org/wiki/Stephen_Wiggins" class="hero-btn" target="_blank">Wikipedia</a>
+                    <a href="https://scholar.google.com/citations?user=FmdPqIUAAAAJ&hl=en" class="hero-btn" target="_blank">Google Scholar</a>
+                    <a href="https://www.youtube.com/@stephenwiggins1" class="hero-btn" target="_blank">YouTube</a>
+                    <a href="https://orcid.org/0000-0002-0780-0911" class="hero-btn" target="_blank">ORCID</a>
+                    <a href="https://www.researchgate.net/profile/Stephen-Wiggins" class="hero-btn" target="_blank">ResearchGate</a>
+                    <a href="https://figshare.com/authors/Stephen_Wiggins/4354339" class="hero-btn" target="_blank">Figshare</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="bio-section">
+            <div class="container">
+                <h2 class="section-title">About</h2>
+                <div class="bio-text">
+                    <p>Stephen Wiggins is renowned for his pioneering research in applied mathematics, with emphasis on nonlinear dynamics, chaos theory, and geometry and transport in phase space. His work has advanced the understanding of phase space structures, mixing, and transport in dynamical systems, with applications ranging from fluid mechanics to chemical reaction dynamics. Wiggins’s research themes connect mathematical foundations with practical scientific challenges, synergistically influencing fields such as theoretical chemistry and geophysical transport.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="themes-section">
+            <div class="container">
+                <h2 class="section-title">Research Themes</h2>
+                <div class="themes-grid">
+                    <div class="theme-card">
+                        <h3>Lagrangian Transport</h3>
+                        <p>Investigating transport and mixing in geophysical flows (oceanic and atmospheric) using dynamical systems theory, focusing on hyperbolic trajectories and invariant manifolds.</p>
+                    </div>
+                    <div class="theme-card">
+                        <h3>Chemical Reaction Dynamics</h3>
+                        <p>Exploring phase space structures in reaction dynamics, including "roaming" mechanisms, transition state theory, and phase space conduits for energy transfer.</p>
+                    </div>
+                    <div class="theme-card">
+                        <h3>Lagrangian Descriptors</h3>
+                        <p>Developing and applying the method of Lagrangian descriptors—a trajectory-based scalar field technique—to reveal phase space structures in complex, aperiodically time-dependent systems.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="books-section">
+            <div class="container">
+                <h2 class="section-title">Books</h2>
+                <div class="books-grid">
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387001777" target="_blank"><img src="Book thumbnails/Dynamical Systems Textbook.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9781461210412" target="_blank"><img src="Book thumbnails/Global bifurcations and chaos book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387975221" target="_blank"><img src="Book thumbnails/Chaotic transport book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387942056" target="_blank"><img src="Book thumbnails/Normally Hyperbolic book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789819815395" target="_blank"><img src="Book thumbnails/Phase Space Structures1.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387332697" target="_blank"><img src="Book thumbnails/Lagrangian Transport book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780521868136" target="_blank"><img src="Book thumbnails/Mathematical foundations of mixing book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789819801855" target="_blank"><img src="Book thumbnails/Quantum mechanics book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780821892022" target="_blank"><img src="Book thumbnails/Orbits homoclinc to resonances book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811282683" target="_blank"><img src="Book thumbnails/ODE dynamical point of view.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811277481" target="_blank"><img src="Book thumbnails/Classical Mechanics problems and solutions.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387949253" target="_blank"><img src="Book thumbnails/Invariant manifolds NLS book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811279249" target="_blank"><img src="Book thumbnails/Classical mechanics book.png" alt="Book"></a></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pubs-section">
+            <div class="container">
+                <h2 class="section-title">Selected Publications</h2>
+                <ul class="pub-list">
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Roaming: A Phase-Space Perspective</h4>
+                            <p><em>Annual Review of Physical Chemistry (2017)</em></p>
+                        </div>
+                        <a href="Representative%20publications/Mauguiere%20et%20al%20annurev-physchem-2017.pdf" class="download-btn" target="_blank">Read PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>The Dynamical Systems Approach to Lagrangian Transport in Oceanic Flows</h4>
+                            <p><em>Annual Review of Fluid Mechanics (2005)</em></p>
+                        </div>
+                        <a href="Representative%20publications/Wiggins_ARFM_05.pdf" class="download-btn" target="_blank">Read PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Painting the Phase Portrait of a Dynamical System with Lagrangian Descriptors</h4>
+                            <p><em>Notices of the AMS (2022)</em></p>
+                        </div>
+                        <a href="Representative%20publications/rnoti-p936.pdf" class="download-btn" target="_blank">Read PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Taming Uncertainty in a Complex World: The Rise of Uncertainty Quantification &ndash; A Tutorial for Beginners</h4>
+                            <p><em>Notices of the AMS (2025)</em></p>
+                        </div>
+                        <a href="Representative%20publications/rnoti-p250.pdf" class="download-btn" target="_blank">Read PDF</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <h2>Connect & Explore</h2>
+                <div class="footer-links">
+                    <a href="https://en.wikipedia.org/wiki/Stephen_Wiggins" class="footer-link" target="_blank">Wikipedia</a> |
+                    <a href="https://scholar.google.com/citations?user=FmdPqIUAAAAJ&hl=en" class="footer-link" target="_blank">Google Scholar</a> |
+                    <a href="https://www.youtube.com/@stephenwiggins1" class="footer-link" target="_blank">YouTube</a> |
+                    <a href="https://orcid.org/0000-0002-0780-0911" class="footer-link" target="_blank">ORCID</a> |
+                    <a href="https://www.researchgate.net/profile/Stephen-Wiggins" class="footer-link" target="_blank">ResearchGate</a> |
+                    <a href="https://figshare.com/authors/Stephen_Wiggins/4354339" class="footer-link" target="_blank">Figshare</a>
+                </div>
+                <p style="margin-top: 30px; font-size: 0.8rem; opacity: 0.7;">&copy; 2025 Stephen Wiggins. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="content-es" class="lang-content" style="display: none;">
+        <header class="hero">
+            <div class="hero-content">
+                <img src="StephenWiggins.jpg" alt="Stephen Wiggins" class="profile-photo">
+                <h1>Stephen Wiggins</h1>
+                <p>Matemáticas Aplicadas | Dinámica No Lineal | Teoría del Caos</p>
+                <div class="hero-links">
+                    <a href="https://en.wikipedia.org/wiki/Stephen_Wiggins" class="hero-btn" target="_blank">Wikipedia</a>
+                    <a href="https://scholar.google.com/citations?user=FmdPqIUAAAAJ&hl=en" class="hero-btn" target="_blank">Google Scholar</a>
+                    <a href="https://www.youtube.com/@stephenwiggins1" class="hero-btn" target="_blank">YouTube</a>
+                    <a href="https://orcid.org/0000-0002-0780-0911" class="hero-btn" target="_blank">ORCID</a>
+                    <a href="https://www.researchgate.net/profile/Stephen-Wiggins" class="hero-btn" target="_blank">ResearchGate</a>
+                    <a href="https://figshare.com/authors/Stephen_Wiggins/4354339" class="hero-btn" target="_blank">Figshare</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="bio-section">
+            <div class="container">
+                <h2 class="section-title">Sobre Mí</h2>
+                <div class="bio-text">
+                    <p>Stephen Wiggins es reconocido por su investigación pionera en matemáticas aplicadas, con énfasis en dinámica no lineal, teoría del caos y geometría y transporte en el espacio de fase. Su trabajo ha avanzado en la comprensión de las estructuras del espacio de fase, la mezcla y el transporte en sistemas dinámicos, con aplicaciones que van desde la mecánica de fluidos hasta la dinámica de reacciones químicas. Los temas de investigación de Wiggins conectan los fundamentos matemáticos con desafíos científicos prácticos, influyendo sinérgicamente en campos como la química teórica y el transporte geofísico.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="themes-section">
+            <div class="container">
+                <h2 class="section-title">Temas de Investigación</h2>
+                <div class="themes-grid">
+                    <div class="theme-card">
+                        <h3>Transporte Lagrangiano</h3>
+                        <p>Investigando el transporte y la mezcla en flujos geofísicos (oceánicos y atmosféricos) utilizando la teoría de sistemas dinámicos, centrándose en trayectorias hiperbólicas y variedades invariantes.</p>
+                    </div>
+                    <div class="theme-card">
+                        <h3>Dinámica de Reacciones Químicas</h3>
+                        <p>Explorando estructuras del espacio de fase en la dinámica de reacciones, incluyendo mecanismos de "roaming", teoría del estado de transición y conductos del espacio de fase para la transferencia de energía.</p>
+                    </div>
+                    <div class="theme-card">
+                        <h3>Descriptores Lagrangianos</h3>
+                        <p>Desarrollando y aplicando el método de descriptores lagrangianos —una técnica de campo escalar basada en trayectorias— para revelar estructuras del espacio de fase en sistemas complejos y aperiódicamente dependientes del tiempo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="books-section">
+            <div class="container">
+                <h2 class="section-title">Libros</h2>
+                <div class="books-grid">
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387001777" target="_blank"><img src="Book thumbnails/Dynamical Systems Textbook.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9781461210412" target="_blank"><img src="Book thumbnails/Global bifurcations and chaos book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387975221" target="_blank"><img src="Book thumbnails/Chaotic transport book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387942056" target="_blank"><img src="Book thumbnails/Normally Hyperbolic book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789819815395" target="_blank"><img src="Book thumbnails/Phase Space Structures1.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387332697" target="_blank"><img src="Book thumbnails/Lagrangian Transport book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780521868136" target="_blank"><img src="Book thumbnails/Mathematical foundations of mixing book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789819801855" target="_blank"><img src="Book thumbnails/Quantum mechanics book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780821892022" target="_blank"><img src="Book thumbnails/Orbits homoclinc to resonances book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811282683" target="_blank"><img src="Book thumbnails/ODE dynamical point of view.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811277481" target="_blank"><img src="Book thumbnails/Classical Mechanics problems and solutions.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387949253" target="_blank"><img src="Book thumbnails/Invariant manifolds NLS book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811279249" target="_blank"><img src="Book thumbnails/Classical mechanics book.png" alt="Book"></a></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pubs-section">
+            <div class="container">
+                <h2 class="section-title">Publicaciones Seleccionadas</h2>
+                <ul class="pub-list">
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Roaming: A Phase-Space Perspective</h4>
+                            <p><em>Annual Review of Physical Chemistry (2017)</em></p>
+                        </div>
+                        <a href="Representative%20publications/Mauguiere%20et%20al%20annurev-physchem-2017.pdf" class="download-btn" target="_blank">Leer PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>The Dynamical Systems Approach to Lagrangian Transport in Oceanic Flows</h4>
+                            <p><em>Annual Review of Fluid Mechanics (2005)</em></p>
+                        </div>
+                        <a href="Representative%20publications/Wiggins_ARFM_05.pdf" class="download-btn" target="_blank">Leer PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Painting the Phase Portrait of a Dynamical System with Lagrangian Descriptors</h4>
+                            <p><em>Notices of the AMS (2022)</em></p>
+                        </div>
+                        <a href="Representative%20publications/rnoti-p936.pdf" class="download-btn" target="_blank">Leer PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Taming Uncertainty in a Complex World: The Rise of Uncertainty Quantification &ndash; A Tutorial for Beginners</h4>
+                            <p><em>Notices of the AMS (2025)</em></p>
+                        </div>
+                        <a href="Representative%20publications/rnoti-p250.pdf" class="download-btn" target="_blank">Leer PDF</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <h2>Conectar y Explorar</h2>
+                <div class="footer-links">
+                    <a href="https://en.wikipedia.org/wiki/Stephen_Wiggins" class="footer-link" target="_blank">Wikipedia</a> |
+                    <a href="https://scholar.google.com/citations?user=FmdPqIUAAAAJ&hl=en" class="footer-link" target="_blank">Google Scholar</a> |
+                    <a href="https://www.youtube.com/@stephenwiggins1" class="footer-link" target="_blank">YouTube</a> |
+                    <a href="https://orcid.org/0000-0002-0780-0911" class="footer-link" target="_blank">ORCID</a> |
+                    <a href="https://www.researchgate.net/profile/Stephen-Wiggins" class="footer-link" target="_blank">ResearchGate</a> |
+                    <a href="https://figshare.com/authors/Stephen_Wiggins/4354339" class="footer-link" target="_blank">Figshare</a>
+                </div>
+                <p style="margin-top: 30px; font-size: 0.8rem; opacity: 0.7;">&copy; 2025 Stephen Wiggins. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="content-fr" class="lang-content" style="display: none;">
+        <header class="hero">
+            <div class="hero-content">
+                <img src="StephenWiggins.jpg" alt="Stephen Wiggins" class="profile-photo">
+                <h1>Stephen Wiggins</h1>
+                <p>Mathématiques Appliquées | Dynamique Non Linéaire | Théorie du Chaos</p>
+                <div class="hero-links">
+                    <a href="https://en.wikipedia.org/wiki/Stephen_Wiggins" class="hero-btn" target="_blank">Wikipedia</a>
+                    <a href="https://scholar.google.com/citations?user=FmdPqIUAAAAJ&hl=en" class="hero-btn" target="_blank">Google Scholar</a>
+                    <a href="https://www.youtube.com/@stephenwiggins1" class="hero-btn" target="_blank">YouTube</a>
+                    <a href="https://orcid.org/0000-0002-0780-0911" class="hero-btn" target="_blank">ORCID</a>
+                    <a href="https://www.researchgate.net/profile/Stephen-Wiggins" class="hero-btn" target="_blank">ResearchGate</a>
+                    <a href="https://figshare.com/authors/Stephen_Wiggins/4354339" class="hero-btn" target="_blank">Figshare</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="bio-section">
+            <div class="container">
+                <h2 class="section-title">À Propos</h2>
+                <div class="bio-text">
+                    <p>Stephen Wiggins est renommé pour ses recherches pionnières en mathématiques appliquées, avec un accent sur la dynamique non linéaire, la théorie du chaos, ainsi que la géométrie et le transport dans l'espace des phases. Ses travaux ont fait progresser la compréhension des structures de l'espace des phases, du mélange et du transport dans les systèmes dynamiques, avec des applications allant de la mécanique des fluides à la dynamique des réactions chimiques. Les thèmes de recherche de Wiggins relient les fondements mathématiques aux défis scientifiques pratiques, influençant de manière synergique des domaines tels que la chimie théorique et le transport géophysique.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="themes-section">
+            <div class="container">
+                <h2 class="section-title">Thèmes de Recherche</h2>
+                <div class="themes-grid">
+                    <div class="theme-card">
+                        <h3>Transport Lagrangien</h3>
+                        <p>Étude du transport et du mélange dans les flux géophysiques (océaniques et atmosphériques) en utilisant la théorie des systèmes dynamiques, en se concentrant sur les trajectoires hyperboliques et les variétés invariantes.</p>
+                    </div>
+                    <div class="theme-card">
+                        <h3>Dynamique des Réactions Chimiques</h3>
+                        <p>Exploration des structures de l'espace des phases dans la dynamique des réactions, y compris les mécanismes de "roaming", la théorie de l'état de transition et les conduits de l'espace des phases pour le transfert d'énergie.</p>
+                    </div>
+                    <div class="theme-card">
+                        <h3>Descripteurs Lagrangiens</h3>
+                        <p>Développement et application de la méthode des descripteurs lagrangiens — une technique de champ scalaire basée sur les trajectoires — pour révéler les structures de l'espace des phases dans des systèmes complexes et dépendant du temps de manière apériodique.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="books-section">
+            <div class="container">
+                <h2 class="section-title">Livres</h2>
+                <div class="books-grid">
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387001777" target="_blank"><img src="Book thumbnails/Dynamical Systems Textbook.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9781461210412" target="_blank"><img src="Book thumbnails/Global bifurcations and chaos book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387975221" target="_blank"><img src="Book thumbnails/Chaotic transport book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387942056" target="_blank"><img src="Book thumbnails/Normally Hyperbolic book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789819815395" target="_blank"><img src="Book thumbnails/Phase Space Structures1.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387332697" target="_blank"><img src="Book thumbnails/Lagrangian Transport book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780521868136" target="_blank"><img src="Book thumbnails/Mathematical foundations of mixing book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789819801855" target="_blank"><img src="Book thumbnails/Quantum mechanics book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780821892022" target="_blank"><img src="Book thumbnails/Orbits homoclinc to resonances book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811282683" target="_blank"><img src="Book thumbnails/ODE dynamical point of view.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811277481" target="_blank"><img src="Book thumbnails/Classical Mechanics problems and solutions.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387949253" target="_blank"><img src="Book thumbnails/Invariant manifolds NLS book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811279249" target="_blank"><img src="Book thumbnails/Classical mechanics book.png" alt="Book"></a></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pubs-section">
+            <div class="container">
+                <h2 class="section-title">Publications Sélectionnées</h2>
+                <ul class="pub-list">
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Roaming: A Phase-Space Perspective</h4>
+                            <p><em>Annual Review of Physical Chemistry (2017)</em></p>
+                        </div>
+                        <a href="Representative%20publications/Mauguiere%20et%20al%20annurev-physchem-2017.pdf" class="download-btn" target="_blank">Lire le PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>The Dynamical Systems Approach to Lagrangian Transport in Oceanic Flows</h4>
+                            <p><em>Annual Review of Fluid Mechanics (2005)</em></p>
+                        </div>
+                        <a href="Representative%20publications/Wiggins_ARFM_05.pdf" class="download-btn" target="_blank">Lire le PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Painting the Phase Portrait of a Dynamical System with Lagrangian Descriptors</h4>
+                            <p><em>Notices of the AMS (2022)</em></p>
+                        </div>
+                        <a href="Representative%20publications/rnoti-p936.pdf" class="download-btn" target="_blank">Lire le PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Taming Uncertainty in a Complex World: The Rise of Uncertainty Quantification &ndash; A Tutorial for Beginners</h4>
+                            <p><em>Notices of the AMS (2025)</em></p>
+                        </div>
+                        <a href="Representative%20publications/rnoti-p250.pdf" class="download-btn" target="_blank">Lire le PDF</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <h2>Connecter et Explorer</h2>
+                <div class="footer-links">
+                    <a href="https://en.wikipedia.org/wiki/Stephen_Wiggins" class="footer-link" target="_blank">Wikipedia</a> |
+                    <a href="https://scholar.google.com/citations?user=FmdPqIUAAAAJ&hl=en" class="footer-link" target="_blank">Google Scholar</a> |
+                    <a href="https://www.youtube.com/@stephenwiggins1" class="footer-link" target="_blank">YouTube</a> |
+                    <a href="https://orcid.org/0000-0002-0780-0911" class="footer-link" target="_blank">ORCID</a> |
+                    <a href="https://www.researchgate.net/profile/Stephen-Wiggins" class="footer-link" target="_blank">ResearchGate</a> |
+                    <a href="https://figshare.com/authors/Stephen_Wiggins/4354339" class="footer-link" target="_blank">Figshare</a>
+                </div>
+                <p style="margin-top: 30px; font-size: 0.8rem; opacity: 0.7;">&copy; 2025 Stephen Wiggins. Tous droits réservés.</p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="content-zh" class="lang-content" style="display: none;">
+        <header class="hero">
+            <div class="hero-content">
+                <img src="StephenWiggins.jpg" alt="Stephen Wiggins" class="profile-photo">
+                <h1>Stephen Wiggins</h1>
+                <p>应用数学 | 非线性动力学 | 混沌理论</p>
+                <div class="hero-links">
+                    <a href="https://en.wikipedia.org/wiki/Stephen_Wiggins" class="hero-btn" target="_blank">Wikipedia</a>
+                    <a href="https://scholar.google.com/citations?user=FmdPqIUAAAAJ&hl=en" class="hero-btn" target="_blank">Google Scholar</a>
+                    <a href="https://www.youtube.com/@stephenwiggins1" class="hero-btn" target="_blank">YouTube</a>
+                    <a href="https://orcid.org/0000-0002-0780-0911" class="hero-btn" target="_blank">ORCID</a>
+                    <a href="https://www.researchgate.net/profile/Stephen-Wiggins" class="hero-btn" target="_blank">ResearchGate</a>
+                    <a href="https://figshare.com/authors/Stephen_Wiggins/4354339" class="hero-btn" target="_blank">Figshare</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="bio-section">
+            <div class="container">
+                <h2 class="section-title">关于</h2>
+                <div class="bio-text">
+                    <p>Stephen Wiggins 因其在应用数学领域的开创性研究而闻名，重点在于非线性动力学、混沌理论以及相空间中的几何与输运。他的工作推进了对动力系统中相空间结构、混合和输运的理解，应用范围从流体力学到化学反应动力学。Wiggins 的研究主题将数学基础与实际科学挑战联系起来，协同影响了理论化学和地球物理输运等领域。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="themes-section">
+            <div class="container">
+                <h2 class="section-title">研究主题</h2>
+                <div class="themes-grid">
+                    <div class="theme-card">
+                        <h3>拉格朗日输运</h3>
+                        <p>利用动力系统理论研究地球物理流（海洋和大气）中的输运和混合，重点关注双曲轨迹和不变流形。</p>
+                    </div>
+                    <div class="theme-card">
+                        <h3>化学反应动力学</h3>
+                        <p>探索反应动力学中的相空间结构，包括“漫游”机制、过渡态理论以及用于能量转移的相空间管道。</p>
+                    </div>
+                    <div class="theme-card">
+                        <h3>拉格朗日描述符</h3>
+                        <p>开发并应用拉格朗日描述符方法——一种基于轨迹的标量场技术——以揭示复杂、非周期性时间依赖系统中的相空间结构。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="books-section">
+            <div class="container">
+                <h2 class="section-title">书籍</h2>
+                <div class="books-grid">
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387001777" target="_blank"><img src="Book thumbnails/Dynamical Systems Textbook.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9781461210412" target="_blank"><img src="Book thumbnails/Global bifurcations and chaos book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387975221" target="_blank"><img src="Book thumbnails/Chaotic transport book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387942056" target="_blank"><img src="Book thumbnails/Normally Hyperbolic book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789819815395" target="_blank"><img src="Book thumbnails/Phase Space Structures1.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387332697" target="_blank"><img src="Book thumbnails/Lagrangian Transport book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780521868136" target="_blank"><img src="Book thumbnails/Mathematical foundations of mixing book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789819801855" target="_blank"><img src="Book thumbnails/Quantum mechanics book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780821892022" target="_blank"><img src="Book thumbnails/Orbits homoclinc to resonances book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811282683" target="_blank"><img src="Book thumbnails/ODE dynamical point of view.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811277481" target="_blank"><img src="Book thumbnails/Classical Mechanics problems and solutions.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387949253" target="_blank"><img src="Book thumbnails/Invariant manifolds NLS book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811279249" target="_blank"><img src="Book thumbnails/Classical mechanics book.png" alt="Book"></a></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pubs-section">
+            <div class="container">
+                <h2 class="section-title">精选出版物</h2>
+                <ul class="pub-list">
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Roaming: A Phase-Space Perspective</h4>
+                            <p><em>Annual Review of Physical Chemistry (2017)</em></p>
+                        </div>
+                        <a href="Representative%20publications/Mauguiere%20et%20al%20annurev-physchem-2017.pdf" class="download-btn" target="_blank">阅读 PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>The Dynamical Systems Approach to Lagrangian Transport in Oceanic Flows</h4>
+                            <p><em>Annual Review of Fluid Mechanics (2005)</em></p>
+                        </div>
+                        <a href="Representative%20publications/Wiggins_ARFM_05.pdf" class="download-btn" target="_blank">阅读 PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Painting the Phase Portrait of a Dynamical System with Lagrangian Descriptors</h4>
+                            <p><em>Notices of the AMS (2022)</em></p>
+                        </div>
+                        <a href="Representative%20publications/rnoti-p936.pdf" class="download-btn" target="_blank">阅读 PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Taming Uncertainty in a Complex World: The Rise of Uncertainty Quantification &ndash; A Tutorial for Beginners</h4>
+                            <p><em>Notices of the AMS (2025)</em></p>
+                        </div>
+                        <a href="Representative%20publications/rnoti-p250.pdf" class="download-btn" target="_blank">阅读 PDF</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <h2>连接与探索</h2>
+                <div class="footer-links">
+                    <a href="https://en.wikipedia.org/wiki/Stephen_Wiggins" class="footer-link" target="_blank">Wikipedia</a> |
+                    <a href="https://scholar.google.com/citations?user=FmdPqIUAAAAJ&hl=en" class="footer-link" target="_blank">Google Scholar</a> |
+                    <a href="https://www.youtube.com/@stephenwiggins1" class="footer-link" target="_blank">YouTube</a> |
+                    <a href="https://orcid.org/0000-0002-0780-0911" class="footer-link" target="_blank">ORCID</a> |
+                    <a href="https://www.researchgate.net/profile/Stephen-Wiggins" class="footer-link" target="_blank">ResearchGate</a> |
+                    <a href="https://figshare.com/authors/Stephen_Wiggins/4354339" class="footer-link" target="_blank">Figshare</a>
+                </div>
+                <p style="margin-top: 30px; font-size: 0.8rem; opacity: 0.7;">&copy; 2025 Stephen Wiggins. 版权所有。</p>
+            </div>
+        </footer>
+    </div>
+
+    <div id="content-chr" class="lang-content" style="display: none;">
+        <header class="hero">
+            <div class="hero-content">
+                <img src="StephenWiggins.jpg" alt="Stephen Wiggins" class="profile-photo">
+                <h1>ᏍᏘᏫᏂ ᏫᎩᏂᏍ</h1>
+                <p>Applied Mathematics | Nonlinear Dynamics | Chaos Theory</p>
+                <div class="hero-links">
+                    <a href="https://en.wikipedia.org/wiki/Stephen_Wiggins" class="hero-btn" target="_blank">Wikipedia</a>
+                    <a href="https://scholar.google.com/citations?user=FmdPqIUAAAAJ&hl=en" class="hero-btn" target="_blank">Google Scholar</a>
+                    <a href="https://www.youtube.com/@stephenwiggins1" class="hero-btn" target="_blank">YouTube</a>
+                    <a href="https://orcid.org/0000-0002-0780-0911" class="hero-btn" target="_blank">ORCID</a>
+                    <a href="https://www.researchgate.net/profile/Stephen-Wiggins" class="hero-btn" target="_blank">ResearchGate</a>
+                    <a href="https://figshare.com/authors/Stephen_Wiggins/4354339" class="hero-btn" target="_blank">Figshare</a>
+                </div>
+            </div>
+        </header>
+
+        <section class="bio-section">
+            <div class="container">
+                <h2 class="section-title">S-gw-u-yu (About)</h2>
+                <div class="bio-text">
+                    <p>Stephen Wiggins is renowned for his pioneering research in applied mathematics, with emphasis on nonlinear dynamics, chaos theory, and geometry and transport in phase space. His work has advanced the understanding of phase space structures, mixing, and transport in dynamical systems, with applications ranging from fluid mechanics to chemical reaction dynamics. Wiggins’s research themes connect mathematical foundations with practical scientific challenges, synergistically influencing fields such as theoretical chemistry and geophysical transport.</p>
+                    
+                    <div style="margin-top: 25px;">
+                        <a href="https://www.omniglot.com/writing/cherokee.htm" target="_blank" class="lang-info-btn">Learn about the Cherokee Language</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="themes-section">
+            <div class="container">
+                <h2 class="section-title">Research Themes</h2>
+                <div class="themes-grid">
+                    <div class="theme-card">
+                        <h3>Lagrangian Transport</h3>
+                        <p>Investigating transport and mixing in geophysical flows (oceanic and atmospheric) using dynamical systems theory, focusing on hyperbolic trajectories and invariant manifolds.</p>
+                    </div>
+                    <div class="theme-card">
+                        <h3>Chemical Reaction Dynamics</h3>
+                        <p>Exploring phase space structures in reaction dynamics, including "roaming" mechanisms, transition state theory, and phase space conduits for energy transfer.</p>
+                    </div>
+                    <div class="theme-card">
+                        <h3>Lagrangian Descriptors</h3>
+                        <p>Developing and applying the method of Lagrangian descriptors—a trajectory-based scalar field technique—to reveal phase space structures in complex, aperiodically time-dependent systems.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="books-section">
+            <div class="container">
+                <h2 class="section-title">ᏗᎪᏪᎵ (Books)</h2>
+                <div class="books-grid">
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387001777" target="_blank"><img src="Book thumbnails/Dynamical Systems Textbook.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9781461210412" target="_blank"><img src="Book thumbnails/Global bifurcations and chaos book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387975221" target="_blank"><img src="Book thumbnails/Chaotic transport book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387942056" target="_blank"><img src="Book thumbnails/Normally Hyperbolic book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789819815395" target="_blank"><img src="Book thumbnails/Phase Space Structures1.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387332697" target="_blank"><img src="Book thumbnails/Lagrangian Transport book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780521868136" target="_blank"><img src="Book thumbnails/Mathematical foundations of mixing book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789819801855" target="_blank"><img src="Book thumbnails/Quantum mechanics book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780821892022" target="_blank"><img src="Book thumbnails/Orbits homoclinc to resonances book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811282683" target="_blank"><img src="Book thumbnails/ODE dynamical point of view.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811277481" target="_blank"><img src="Book thumbnails/Classical Mechanics problems and solutions.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9780387949253" target="_blank"><img src="Book thumbnails/Invariant manifolds NLS book.png" alt="Book"></a></div>
+                    <div class="book-item"><a href="https://www.amazon.com/s?k=9789811279249" target="_blank"><img src="Book thumbnails/Classical mechanics book.png" alt="Book"></a></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pubs-section">
+            <div class="container">
+                <h2 class="section-title">Selected Publications</h2>
+                <ul class="pub-list">
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Roaming: A Phase-Space Perspective</h4>
+                            <p><em>Annual Review of Physical Chemistry (2017)</em></p>
+                        </div>
+                        <a href="Representative%20publications/Mauguiere%20et%20al%20annurev-physchem-2017.pdf" class="download-btn" target="_blank">Read PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>The Dynamical Systems Approach to Lagrangian Transport in Oceanic Flows</h4>
+                            <p><em>Annual Review of Fluid Mechanics (2005)</em></p>
+                        </div>
+                        <a href="Representative%20publications/Wiggins_ARFM_05.pdf" class="download-btn" target="_blank">Read PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Painting the Phase Portrait of a Dynamical System with Lagrangian Descriptors</h4>
+                            <p><em>Notices of the AMS (2022)</em></p>
+                        </div>
+                        <a href="Representative%20publications/rnoti-p936.pdf" class="download-btn" target="_blank">Read PDF</a>
+                    </li>
+                    <li class="pub-item">
+                        <div class="pub-content">
+                            <h4>Taming Uncertainty in a Complex World: The Rise of Uncertainty Quantification &ndash; A Tutorial for Beginners</h4>
+                            <p><em>Notices of the AMS (2025)</em></p>
+                        </div>
+                        <a href="Representative%20publications/rnoti-p250.pdf" class="download-btn" target="_blank">Read PDF</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <h2>Connect & Explore</h2>
+                <div class="footer-links">
+                    <a href="https://en.wikipedia.org/wiki/Stephen_Wiggins" class="footer-link" target="_blank">Wikipedia</a> |
+                    <a href="https://scholar.google.com/citations?user=FmdPqIUAAAAJ&hl=en" class="footer-link" target="_blank">Google Scholar</a> |
+                    <a href="https://www.youtube.com/@stephenwiggins1" class="footer-link" target="_blank">YouTube</a> |
+                    <a href="https://orcid.org/0000-0002-0780-0911" class="footer-link" target="_blank">ORCID</a> |
+                    <a href="https://www.researchgate.net/profile/Stephen-Wiggins" class="footer-link" target="_blank">ResearchGate</a> |
+                    <a href="https://figshare.com/authors/Stephen_Wiggins/4354339" class="footer-link" target="_blank">Figshare</a>
+                </div>
+                <p style="margin-top: 30px; font-size: 0.8rem; opacity: 0.7;">&copy; 2025 Stephen Wiggins. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function setLanguage(lang) {
+            // Hide all language content sections
+            var contents = document.querySelectorAll('.lang-content');
+            for(var i=0; i<contents.length; i++) {
+                contents[i].style.display = 'none';
+            }
+
+            // Show selected language content
+            var selected = document.getElementById('content-' + lang);
+            if(selected) {
+                selected.style.display = 'block';
+            }
+
+            // Update active state of buttons
+            var buttons = document.querySelectorAll('.lang-btn');
+            for(var i=0; i<buttons.length; i++) {
+                buttons[i].classList.remove('active');
+            }
+            
+            var activeBtn = document.getElementById('btn-' + lang);
+            if(activeBtn) {
+                activeBtn.classList.add('active');
+            }
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+
+</body>
+</html>
